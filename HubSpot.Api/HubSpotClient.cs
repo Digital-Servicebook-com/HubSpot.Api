@@ -17,12 +17,13 @@ public class HubSpotClient : IDisposable
 		DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
 		Converters =
 		{
-			new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseUpper)
+            new JsonEnumMemberStringEnumConverter(),
 		}
 	});
 
 	public string Version { get; }
 
+    
 	public HubSpotClient(HubSpotClientOptions hubSpotClientOptions)
 	{
 		var apiClientVersion = new Version(ThisAssembly.AssemblyFileVersion);
@@ -51,6 +52,11 @@ public class HubSpotClient : IDisposable
 		Marketing = new(_httpClient, refitSettings);
 		Webhooks = new(_httpClient, refitSettings);
 	}
+    
+    public class UpperCaseNamingPolicy : JsonNamingPolicy
+    {
+        public override string ConvertName (string name) => name.ToUpperInvariant();
+    }
 
 	public Analytics Analytics { get; }
 

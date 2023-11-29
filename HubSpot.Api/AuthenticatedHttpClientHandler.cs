@@ -9,10 +9,11 @@ internal sealed class AuthenticatedHttpClientHandler : HttpClientHandler
 {
 	private readonly HubSpotClientOptions _options;
 	private readonly ILogger _logger;
-	private readonly LogLevel _levelToLogAt = LogLevel.Trace;
+//	private readonly LogLevel _options.LogLevel;
 
 	public AuthenticatedHttpClientHandler(HubSpotClientOptions hubSpotClientOptions)
 	{
+     //   _options.LogLevel = hubSpotClientOptions.LogLevel;
 		_options = hubSpotClientOptions;
 
 		// Use the default logger if no factory is provided
@@ -56,13 +57,13 @@ internal sealed class AuthenticatedHttpClientHandler : HttpClientHandler
 			cancellationToken.ThrowIfCancellationRequested();
 
 			// Only do diagnostic logging if we're at the level we want to enable for as this is more efficient
-			if (_logger.IsEnabled(_levelToLogAt))
+			if (_logger.IsEnabled(_options.LogLevel))
 			{
-				_logger.Log(_levelToLogAt, "{LogPrefix}Request\r\n{Request}", logPrefix, request);
+				_logger.Log(_options.LogLevel, "{LogPrefix}Request\r\n{Request}", logPrefix, request);
 				if (request.Content != null)
 				{
 					var requestContent = await request.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-					_logger.Log(_levelToLogAt, "{LogPrefix}RequestContent\r\n{RequestContent}", logPrefix, requestContent);
+					_logger.Log(_options.LogLevel, "{LogPrefix}RequestContent\r\n{RequestContent}", logPrefix, requestContent);
 				}
 			}
 
@@ -70,13 +71,13 @@ internal sealed class AuthenticatedHttpClientHandler : HttpClientHandler
 			var httpResponseMessage = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
 			// Only do diagnostic logging if we're at the level we want to enable for as this is more efficient
-			if (_logger.IsEnabled(_levelToLogAt))
+			if (_logger.IsEnabled(_options.LogLevel))
 			{
-				_logger.Log(_levelToLogAt, "{LogPrefix}Response\r\n{HttpResponseMessage}", logPrefix, httpResponseMessage);
+				_logger.Log(_options.LogLevel, "{LogPrefix}Response\r\n{HttpResponseMessage}", logPrefix, httpResponseMessage);
 				if (httpResponseMessage.Content != null)
 				{
 					var responseContent = await httpResponseMessage.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-					_logger.Log(_levelToLogAt, "{LogPrefix}ResponseContent\r\n{ResponseContent}", logPrefix, responseContent);
+					_logger.Log(_options.LogLevel, "{LogPrefix}ResponseContent\r\n{ResponseContent}", logPrefix, responseContent);
 				}
 			}
 

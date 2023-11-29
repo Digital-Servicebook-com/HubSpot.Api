@@ -34,4 +34,6 @@ public class HubSpotClientOptions
 	/// The optional logger to use for logging.
 	/// </summary>
 	public ILogger? Logger { get; set; }
+
+    public LogLevel LogLevel { get; set; }
 }

@@ -21,6 +21,12 @@ public interface ICompanies
 		bool? archived = null,
 		CancellationToken cancellationToken = default
 	);
+    
+    [Post("/crm/v3/objects/companies/search")]
+    Task<CrmPage> SearchAsync(
+        [Body] SearchRequest searchRequest,
+        CancellationToken cancellationToken = default
+    );
 
 	[Get("/crm/v3/objects/companies/{id}")]
 	Task<HubSpotObject> GetAsync(
