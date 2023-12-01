@@ -49,4 +49,11 @@ public interface ICompanies
 		[Body] DeleteRequest deleteRequest,
 		CancellationToken cancellationToken = default
 	);
+    
+    [Patch("/crm/v3/objects/companies/{id}")]
+    Task<HubSpotObject> PatchAsync(
+        string id,
+        [Body] HubSpotPatchObject hubSpotObject,
+        CancellationToken cancellationToken = default
+    );
 }
